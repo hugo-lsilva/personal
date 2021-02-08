@@ -1,0 +1,10 @@
+br\com\companhia\vendas\domain\entity\AbstractEntity.class
+br\com\companhia\vendas\domain\entity\Produto.class
+br\com\companhia\vendas\persistence\facade\RepositoryFacade.class
+br\com\companhia\vendas\persistence\dao\ItemProdutoDAO.class
+br\com\companhia\vendas\infrastructure\exception\InfrastructureException.class
+br\com\companhia\vendas\main\Application.class
+br\com\companhia\vendas\persistence\dao\ProdutoDAO.class
+br\com\companhia\vendas\domain\entity\ItemProduto.class
+br\com\companhia\vendas\infrastructure\db\H2JDBCUtils.class
+br\com\companhia\vendas\persistence\dao\AbstractDAO.class
