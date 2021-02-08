@@ -73,12 +73,55 @@ public class ProdutoDAO extends AbstractDAO<Produto> {
 		return listaProdutos;
 	}
 	
+	/**
+	 * Consulta produto pelo nome.
+	 * 
+	 * @param nome
+	 * @return
+	 * @throws SQLException
+	 */
 	public List<Produto> findForName(String nome) throws SQLException {
 		StringBuffer sql = new StringBuffer();
-		sql.append("select produto.* from PRODUTO produto where upper(produto.nome) like upper(?) order by produto.codigoproduto ");
+		sql.append("select produto.* from PRODUTO produto where upper(produto.nome) like upper(?) order by produto.nome ");
 		Connection con = this.getConnection();
 		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, "%" + nome + "%¨");
+		ps.setString(1, "%" + nome + "%");
+		ResultSet rs = ps.executeQuery();
+		List<Produto> listaProdutos = new ArrayList<Produto>();
+		while (rs.next()) {
+			Produto produto = new Produto();
+			produto.setCodigoProduto(rs.getInt(1));
+			produto.setNome(rs.getString(2));
+			produto.setDescricao(rs.getString(3));
+			produto.setCategoria(rs.getString(4));
+			listaProdutos.add(produto);
+		}
+		ps.close();
+		con.close();
+		rs.close();
+		return listaProdutos;
+	}
+	
+	/**
+	 * Consulta produtos com o valor informado em todos os seus campos.
+	 * 
+	 * @param value
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Produto> find(String value) throws SQLException {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select produto.* from PRODUTO produto ");
+		sql.append("where upper(produto.nome) like upper(?) ");
+		sql.append("or upper(produto.descricao) like upper(?) ");
+		sql.append("or upper(produto.categoria) like upper(?) ");
+		sql.append("order by produto.codigoproduto ");
+		Connection con = this.getConnection();
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, "%" + value + "%");
+		ps.setString(2, "%" + value + "%");
+		ps.setString(3, "%" + value + "%");
+		
 		ResultSet rs = ps.executeQuery();
 		List<Produto> listaProdutos = new ArrayList<Produto>();
 		while (rs.next()) {
@@ -95,52 +138,4 @@ public class ProdutoDAO extends AbstractDAO<Produto> {
 		return listaProdutos;
 	} 
 
-	@Override
-	public int insert(Produto produto) throws SQLException {
-		StringBuffer sql = new StringBuffer();
-		sql.append("insert into PRODUTO (NOME, DESCRICAO, CATEGORIA) values (?, ?, ?);");
-		Connection con = this.getConnection();
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, produto.getNome());
-		ps.setString(2, produto.getDescricao());
-		ps.setString(3, produto.getCategoria());
-		int retorno = ps.executeUpdate();
-		con.commit();
-		ps.close();
-		con.close();
-		return retorno;
-	}
-
-	@Override
-	public int update(Produto produto) throws SQLException {
-		StringBuffer sql = new StringBuffer();
-		sql.append("update PRODUTO set NOME=?, DESCRICAO=?, CATEGORIA=? where CODIGOPRODUTO = ?");
-		Connection con = this.getConnection();
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, produto.getNome());
-		ps.setString(2, produto.getDescricao());
-		ps.setString(3, produto.getCategoria());
-		ps.setInt(4, produto.getCodigoProduto());
-		int retorno = ps.executeUpdate();
-		con.commit();
-		ps.close();
-		con.close();
-		return retorno;
-	}
-
-	@Override
-	public int delete(Produto produto) throws SQLException {
-		StringBuffer sql = new StringBuffer();
-		sql.append("delete from ITEM_PRODUTO where CODIGOPRODUTO = ?;");
-		sql.append("delete from PRODUTO where CODIGOPRODUTO = ?");
-		Connection con = this.getConnection();
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setInt(1, produto.getCodigoProduto());
-		ps.setInt(2, produto.getCodigoProduto());
-		int retorno = ps.executeUpdate();
-		con.commit();
-		ps.close();
-		con.close();
-		return retorno;
-	}
 }

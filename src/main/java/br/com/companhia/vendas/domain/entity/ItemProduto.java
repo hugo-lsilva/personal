@@ -8,24 +8,6 @@ public class ItemProduto implements AbstractEntity {
 	private String descricao;
 	private String categoria;
 
-	public ItemProduto() {
-	}
-
-	public ItemProduto(Integer codigoItem, Produto produto) {
-		super();
-		this.codigoItem = codigoItem;
-		this.produto = produto;
-	}
-
-	public ItemProduto(Integer codigoItem, Produto produto, String nome, String descricao, String categoria) {
-		super();
-		this.codigoItem = codigoItem;
-		this.produto = produto;
-		this.nome = nome;
-		this.descricao = descricao;
-		this.categoria = categoria;
-	}
-
 	public Integer getCodigoItem() {
 		return codigoItem;
 	}

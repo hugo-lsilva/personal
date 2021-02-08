@@ -20,14 +20,6 @@ public class Produto implements AbstractEntity {
 		this.codigoProduto = codigoProduto;
 	}
 
-	public Produto(Integer codigoProduto, String nome, String descricao, String categoria) {
-		super();
-		this.codigoProduto = codigoProduto;
-		this.nome = nome;
-		this.descricao = descricao;
-		this.categoria = categoria;
-	}
-
 	public Integer getCodigoProduto() {
 		return codigoProduto;
 	}

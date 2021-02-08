@@ -70,51 +70,71 @@ public class ItemProdutoDAO extends AbstractDAO<ItemProduto> {
 		return listaItens;
 	}
 
-	@Override
-	public int insert(ItemProduto item) throws SQLException {
+	/**
+	 * Consulta item de produto pelo nome.
+	 * 
+	 * @param nome
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<ItemProduto> findForName(String nome) throws SQLException {
 		StringBuffer sql = new StringBuffer();
-		sql.append("insert into ITEM_PRODUTO (CODIGOPRODUTO, NOME, DESCRICAO, CATEGORIA) values (?, ?, ?, ?);");
+		sql.append("select item.codigoitem as coditem, item.nome as nomeitem, item.descricao as descitem, item.categoria catitem, item.codigoproduto as codprod from ITEM_PRODUTO item where upper(item.nome) like upper(?) order by item.nome ");
 		Connection con = this.getConnection();
 		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setInt(1, item.getProduto().getCodigoProduto());
-		ps.setString(2, item.getNome());
-		ps.setString(3, item.getDescricao());
-		ps.setString(4, item.getCategoria());
-		int retorno = ps.executeUpdate();
-		con.commit();
+		ps.setString(1, "%" + nome + "%");
+		ResultSet rs = ps.executeQuery();
+		List<ItemProduto> listaItens = new ArrayList<ItemProduto>();
+		while (rs.next()) {
+			ItemProduto item = new ItemProduto();
+			item.setCodigoItem(rs.getInt(1));
+			item.setNome(rs.getString(2));
+			item.setDescricao(rs.getString(3));
+			item.setCategoria(rs.getString(4));
+			item.setProduto(new Produto(rs.getInt(5)));
+			listaItens.add(item);
+		}
 		ps.close();
 		con.close();
-		return retorno;
+		rs.close();
+		return listaItens;
 	}
+	
+	/**
+	 * Consulta itens de produtos com o valor informado em todos os seus campos.
+	 * 
+	 * @param value
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<ItemProduto> find(String value) throws SQLException {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select item.codigoitem as coditem, item.nome as nomeitem, item.descricao as descitem, item.categoria catitem, item.codigoproduto as codprod from ITEM_PRODUTO item ");
+		sql.append("where upper(item.nome) like upper(?) ");
+		sql.append("or upper(item.descricao) like upper(?) ");
+		sql.append("or upper(item.categoria) like upper(?) ");
+		sql.append("order by item.codigoproduto, item.codigoitem ");
+		Connection con = this.getConnection();
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, "%" + value + "%");
+		ps.setString(2, "%" + value + "%");
+		ps.setString(3, "%" + value + "%");
+		
+		ResultSet rs = ps.executeQuery();
+		List<ItemProduto> listaItens = new ArrayList<ItemProduto>();
+		while (rs.next()) {
+			ItemProduto item = new ItemProduto();
+			item.setCodigoItem(rs.getInt(1));
+			item.setNome(rs.getString(2));
+			item.setDescricao(rs.getString(3));
+			item.setCategoria(rs.getString(4));
+			item.setProduto(new Produto(rs.getInt(5)));
+			listaItens.add(item);
+		}
+		ps.close();
+		con.close();
+		rs.close();
+		return listaItens;
+	} 
 
-	@Override
-	public int update(ItemProduto item) throws SQLException {
-		StringBuffer sql = new StringBuffer();
-		sql.append("update ITEM_PRODUTO set NOME=?, DESCRICAO=?, CATEGORIA=? where CODIGOITEM = ?");
-		Connection con = this.getConnection();
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, item.getNome());
-		ps.setString(2, item.getDescricao());
-		ps.setString(3, item.getCategoria());
-		ps.setInt(4, item.getCodigoItem());
-		int retorno = ps.executeUpdate();
-		con.commit();
-		ps.close();
-		con.close();
-		return retorno;
-	}
-
-	@Override
-	public int delete(ItemProduto item) throws SQLException {
-		StringBuffer sql = new StringBuffer();
-		sql.append("delete from ITEM_PRODUTO where CODIGOITEM = ?");
-		Connection con = this.getConnection();
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setInt(1, item.getCodigoItem());
-		int retorno = ps.executeUpdate();
-		con.commit();
-		ps.close();
-		con.close();
-		return retorno;
-	}
 }

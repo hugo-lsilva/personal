@@ -9,6 +9,7 @@ import javax.inject.Named;
 import br.com.companhia.vendas.domain.entity.ItemProduto;
 import br.com.companhia.vendas.domain.entity.Produto;
 import br.com.companhia.vendas.infrastructure.exception.InfrastructureException;
+import br.com.companhia.vendas.infrastructure.exception.ValidationException;
 import br.com.companhia.vendas.persistence.dao.ItemProdutoDAO;
 import br.com.companhia.vendas.persistence.dao.ProdutoDAO;
 
@@ -25,6 +26,9 @@ public class RepositoryFacade {
 
 	public Produto buscaProdutoPorCodigo(Integer id) throws InfrastructureException {
 		try {
+			if (isEmpty(id)) {
+				throw new ValidationException("Filtro obrigatório!");
+			}
 			return this.produtoDAO.findById(id);
 		} catch (SQLException e) {
 			throw new InfrastructureException(e);
@@ -38,21 +42,30 @@ public class RepositoryFacade {
 			throw new InfrastructureException(e);
 		}
 	}
-
-	public int salvaProduto(Produto produto) throws InfrastructureException {
+	
+	public List<Produto> buscarProdutoPorNome(String nome) throws InfrastructureException {
 		try {
-			if (produto.getCodigoProduto() == null) {
-				return this.produtoDAO.insert(produto);
+			if (isEmpty(nome)) {
+				throw new ValidationException("Filtro obrigatório!");
 			}
-			return this.produtoDAO.update(produto);
+			return this.produtoDAO.findForName(nome);
 		} catch (SQLException e) {
 			throw new InfrastructureException(e);
 		}
 	}
-
-	public int excluiProduto(Produto produto) throws InfrastructureException {
+	
+	/**
+	 * Consulta um produto pelo valor informado em todos os seus atributos.
+	 * @param valor
+	 * @return
+	 * @throws InfrastructureException
+	 */
+	public List<Produto> buscarProduto(String valor) throws InfrastructureException {
 		try {
-			return this.produtoDAO.delete(produto);
+			if (isEmpty(valor)) {
+				throw new ValidationException("Filtro obrigatório!");
+			}
+			return this.produtoDAO.find(valor);
 		} catch (SQLException e) {
 			throw new InfrastructureException(e);
 		}
@@ -60,6 +73,9 @@ public class RepositoryFacade {
 
 	public ItemProduto buscaItemProdutoPorCodigo(Integer id) throws InfrastructureException {
 		try {
+			if (isEmpty(id)) {
+				throw new ValidationException("Filtro obrigatório!");
+			}
 			return this.itemProdutoDAO.findById(id);
 		} catch (SQLException e) {
 			throw new InfrastructureException(e);
@@ -73,23 +89,41 @@ public class RepositoryFacade {
 			throw new InfrastructureException(e);
 		}
 	}
-
-	public int salvaItemProduto(ItemProduto item) throws InfrastructureException {
+	
+	public List<ItemProduto> buscarItemProdutoPorNome(String nome) throws InfrastructureException {
 		try {
-			if (item.getCodigoItem() == null) {
-				return this.itemProdutoDAO.insert(item);
+			if (isEmpty(nome)) {
+				throw new ValidationException("Filtro obrigatório!");
 			}
-			return this.itemProdutoDAO.update(item);
+			return this.itemProdutoDAO.findForName(nome);
 		} catch (SQLException e) {
 			throw new InfrastructureException(e);
 		}
+	}
+	
+	/**
+	 * Consulta itens de produtos com o valor informado em todos os seus campos.
+	 * @param valor
+	 * @return
+	 * @throws InfrastructureException
+	 */
+	public List<ItemProduto> buscarItemProduto(String valor) throws InfrastructureException {
+		try {
+			if (isEmpty(valor)) {
+				throw new ValidationException("Filtro obrigatório!");
+			}
+			return this.itemProdutoDAO.find(valor);
+		} catch (SQLException e) {
+			throw new InfrastructureException(e);
+		}
+	}
+	
+	private static final boolean isEmpty(String valor) {
+		return valor == null || valor.trim().isEmpty();
+	}
+	
+	private static final boolean isEmpty(Object object) {
+		return object == null;
 	}
 
-	public int excluiItemProduto(ItemProduto item) throws InfrastructureException {
-		try {
-			return this.itemProdutoDAO.delete(item);
-		} catch (SQLException e) {
-			throw new InfrastructureException(e);
-		}
-	}
 }

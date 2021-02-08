@@ -100,7 +100,7 @@ public class H2JDBCUtils {
 		insert.append("(1, 'HD de 1TB', 'HD - 1TB Velocidade: SATA 5400 RPM.', 'Armazenamento');").append("\n");
 		// PRODUTO 2
 		insert.append("insert into PRODUTO (CODIGOPRODUTO, NOME, DESCRICAO, CATEGORIA) values ");
-		insert.append("(2, 'Notebook Dell Inspiron 3540', 'Notebook Dell. Tela 14\", Processador Intel Core i5, 8 GB de RAM, SSD 240 GB.', 'Notebook pessoal');").append("\n");
+		insert.append("(2, 'Notebook Dell Inspiron 3540', 'Notebook Dell. Tela 14\", Processador Intel Core i5, 8 GB de RAM, SSD 240 GB. aaa', 'Notebook pessoal');").append("\n");
 		insert.append("insert into ITEM_PRODUTO (CODIGOPRODUTO, NOME, DESCRICAO, CATEGORIA) values ");
 		insert.append("(2, 'Pente de memória RAM', 'Pente DDR3 de 8GB', 'Memória RAM');").append("\n");
 		insert.append("insert into ITEM_PRODUTO (CODIGOPRODUTO, NOME, DESCRICAO, CATEGORIA) values ");
@@ -111,7 +111,7 @@ public class H2JDBCUtils {
 		insert.append("insert into ITEM_PRODUTO (CODIGOPRODUTO, NOME, DESCRICAO, CATEGORIA) values ");
 		insert.append("(3, 'Processador Intel Core i5 8GB', 'Processador Intel Core i5 8GB', 'Processador');").append("\n");
 		insert.append("insert into ITEM_PRODUTO (CODIGOPRODUTO, NOME, DESCRICAO, CATEGORIA) values ");
-		insert.append("(3, 'NVIDIA GeForce GTX1650 com 4GB', 'Placa de vídeo GeForce GTX1650 com 4GB.', 'Placa de Vídeo');").append("\n");
+		insert.append("(3, 'NVIDIA GeForce GTX1650 com 4GB', 'Placa de vídeo GeForce GTX1650 com 4GB.cc', 'Placa de Vídeo');").append("\n");
 		Connection conn = null;
 		Statement stmt = null;
 		try {

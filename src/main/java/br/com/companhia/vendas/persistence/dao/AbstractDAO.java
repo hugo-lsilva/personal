@@ -23,30 +23,6 @@ public abstract class AbstractDAO<T extends AbstractEntity> {
 	public abstract List<T> findAll() throws SQLException;
 
 	/**
-	 * Grava novo registro da entidade.
-	 * @param entity
-	 * @return
-	 * @throws SQLException
-	 */
-	public abstract int insert(T entity) throws SQLException;
-
-	/**
-	 * Altera registro da entidade.
-	 * @param entity
-	 * @return
-	 * @throws SQLException
-	 */
-	public abstract int update(T entity) throws SQLException;
-
-	/**
-	 * Exclui o registro da entidade.
-	 * @param entity
-	 * @return
-	 * @throws SQLException
-	 */
-	public abstract int delete(T entity) throws SQLException;
-
-	/**
 	 * Retorna conexão com o banco de dados.
 	 * @return
 	 * @throws SQLException
